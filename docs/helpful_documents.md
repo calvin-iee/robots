@@ -8,7 +8,7 @@ This file contains information that will be helpful for the competition.
     - The documentation is divided into several different areas to find what you are looking for
     - Follow the links and you should be able to find documentation for any of the functions you see or questions that you have
     - Please restrict yourself to only looking in chapter 3 of this website. Other chapters contain example code that may spoil the fun :)
-- Important notes:
+- Import notes:
     - The robot has only 2048 Bytes of RAM. This means you must be very careful about memory usage
 
 ## Design Documents
