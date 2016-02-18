@@ -1,6 +1,8 @@
 // Put your includes up here
 #include <pololu/3pi.h>
 #include "follow_segment.h"
+#include "initialize.h"
+#include "turn.h"
 
 char path[100] = "";
 unsigned char path_length = 0; // the length of the path
@@ -8,7 +10,11 @@ unsigned char path_length = 0; // the length of the path
 
 void first_main_loop()
 {
-    // FIRST MAIN LOOP BODY
+    /* This function returns 1 when it finds "something interesting"
+     * Otherwise, it just lets itself finish. It will be run until
+     *  something "truthy" is returned
+     */
+
     follow_segment();
      
     // Drive straight a bit.  This helps us in case we entered the
@@ -49,14 +55,16 @@ void first_main_loop()
     // If all three middle sensors are on dark black, we have
     // solved the maze.
     if(sensors[1] > 600 && sensors[2] > 600 && sensors[3] > 600)
-        break;
+        return 1;
      
     // Intersection identification is complete.
     // If the maze has been solved, we can follow the existing
     // path.  Otherwise, we need to learn the solution.
+    //      from `turn.c`
     unsigned char dir = select_turn(found_left, found_straight, found_right);
      
     // Make the turn indicated by the path.
+    //      from `turn.c`
     turn(dir);
      
     // Store the intersection in the path variable.
@@ -67,11 +75,11 @@ void first_main_loop()
     // exceed the bounds of the array.  We'll ignore that in this
     // example.
      
-    // Simplify the learned path.
+    // Simplify the learned path. You can implement this!
     // simplify_path();
      
     // Display the path on the LCD.
-    // display_path();
+    display_path();
 }
 
 void second_main_loop()
@@ -93,12 +101,9 @@ void second_main_loop()
 // This function is called once, from main.c.
 void maze_solve()
 {
-    while(1)
-    {
-        // FIRST MAIN LOOP BODY
-        // (when we find the goal, we use break; to get out of this)
-        first_main_loop()
-    }
+    // FIRST MAIN LOOP BODY
+    // (when we find the goal, we use break; to get out of this)
+    while(!first_main_loop()) {}
     // Now enter an infinite loop - we can re-run the maze as many
     // times as we want to.
     while(1)
@@ -111,8 +116,36 @@ void maze_solve()
             // SECOND MAIN LOOP BODY
             second_main_loop()
         }
-    // Follow the last segment up to the finish.
-    follow_segment();
-    // Now we should be at the finish! Restart the loop.
+        // Follow the last segment up to the finish.
+        follow_segment();
+        // Now we should be at the finish! Restart the loop.
     }
+}
+
+// Displays the current path on the LCD, using two rows if necessary.
+//  You can get more details if you'd like from this
+void display_path()
+{
+    // Set the last character of the path to a 0 so that the print()
+    // function can find the end of the string.  This is how strings
+    // are normally terminated in C.
+    path[path_length] = 0;
+
+    clear();
+    print(path);
+
+    if(path_length > 8)
+    {
+        lcd_goto_xy(0,1);
+        print(path+8);
+    }
+}
+
+int main()
+{
+    // First get your robot to properly calibrate
+    initialize();
+
+    // Now solve the maze!
+    maze_solve();
 }

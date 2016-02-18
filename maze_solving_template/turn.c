@@ -9,8 +9,13 @@
 #define DELAY_TURN      200
 #define DELAY_UTURN     400
 
-// Define your code for turning here.
-//  Define your 'API' here:
+/* Define your code for turning here.
+ *  Define your 'API' here:
+ *      In this example, an 'L' means to turn left.
+ *      This 'L' is selected from `select_turn`
+ *  See where this implemented in the first_main_loop() in main.c
+ */
+
 void turn(char direction)
 {
     // The easiest way to do this is with a switch/case statement
