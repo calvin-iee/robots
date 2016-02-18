@@ -1,6 +1,52 @@
 #include <pololu/3pi.h>
 #include <avr/pgmspace.h>
 
+// Introductory messages.  The "PROGMEM" identifier causes the data to
+// go into program space.
+const char welcome_line1[] PROGMEM = " Pololu";
+const char welcome_line2[] PROGMEM = "3\xf7 Robot";
+const char demo_name_line1[] PROGMEM = "PID Line";
+const char demo_name_line2[] PROGMEM = "follower";
+
+// A couple of simple tunes, stored in program space.
+const char welcome[] PROGMEM = ">g32>>c32";
+const char go[] PROGMEM = "L16 cdegreg4";
+
+// Data for generating the characters used in load_custom_characters
+// and display_readings.  By reading levels[] starting at various
+// offsets, we can generate all of the 7 extra characters needed for a
+// bargraph.  This is also stored in program space.
+const char levels[] PROGMEM = {
+    0b00000,
+    0b00000,
+    0b00000,
+    0b00000,
+    0b00000,
+    0b00000,
+    0b00000,
+    0b11111,
+    0b11111,
+    0b11111,
+    0b11111,
+    0b11111,
+    0b11111,
+    0b11111
+};
+
+// This function loads custom characters into the LCD.  Up to 8
+// characters can be loaded; we use them for 7 levels of a bar graph.
+void load_custom_characters()
+{
+    lcd_load_custom_character(levels+0,0); // no offset, e.g. one bar
+    lcd_load_custom_character(levels+1,1); // two bars
+    lcd_load_custom_character(levels+2,2); // etc...
+    lcd_load_custom_character(levels+3,3);
+    lcd_load_custom_character(levels+4,4);
+    lcd_load_custom_character(levels+5,5);
+    lcd_load_custom_character(levels+6,6);
+    clear(); // the LCD must be cleared for the characters to take effect
+}
+
 // Initializes the 3pi, displays a welcome message, calibrates, and
 // plays the initial music.
 void initialize()

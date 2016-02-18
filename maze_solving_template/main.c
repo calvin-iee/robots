@@ -8,7 +8,26 @@ char path[100] = "";
 unsigned char path_length = 0; // the length of the path
 
 
-void first_main_loop()
+// Displays the current path on the LCD, using two rows if necessary.
+//  You can get more details if you'd like from this
+void display_path()
+{
+    // Set the last character of the path to a 0 so that the print()
+    // function can find the end of the string.  This is how strings
+    // are normally terminated in C.
+    path[path_length] = 0;
+
+    clear();
+    print(path);
+
+    if(path_length > 8)
+    {
+        lcd_goto_xy(0,1);
+        print(path+8);
+    }
+}
+
+int first_main_loop()
 {
     /* This function returns 1 when it finds "something interesting"
      * Otherwise, it just lets itself finish. It will be run until
@@ -80,9 +99,11 @@ void first_main_loop()
      
     // Display the path on the LCD.
     display_path();
+
+    return 0;
 }
 
-void second_main_loop()
+void second_main_loop(int i)
 {
     // SECOND MAIN LOOP BODY
     follow_segment();
@@ -114,30 +135,11 @@ void maze_solve()
         for(i=0;i<path_length;i++)
         {
             // SECOND MAIN LOOP BODY
-            second_main_loop()
+            second_main_loop(i);
         }
         // Follow the last segment up to the finish.
         follow_segment();
         // Now we should be at the finish! Restart the loop.
-    }
-}
-
-// Displays the current path on the LCD, using two rows if necessary.
-//  You can get more details if you'd like from this
-void display_path()
-{
-    // Set the last character of the path to a 0 so that the print()
-    // function can find the end of the string.  This is how strings
-    // are normally terminated in C.
-    path[path_length] = 0;
-
-    clear();
-    print(path);
-
-    if(path_length > 8)
-    {
-        lcd_goto_xy(0,1);
-        print(path+8);
     }
 }
 
