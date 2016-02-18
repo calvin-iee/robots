@@ -47,6 +47,28 @@ void load_custom_characters()
     clear(); // the LCD must be cleared for the characters to take effect
 }
 
+// This function displays the sensor readings using a bar graph.
+void display_readings(const unsigned int *calibrated_values)
+{
+    unsigned char i;
+
+    for(i=0;i<5;i++) {
+        // Initialize the array of characters that we will use for the
+        // graph.  Using the space, an extra copy of the one-bar
+        // character, and character 255 (a full black box), we get 10
+        // characters in the array.
+        const char display_characters[10] = {' ',0,0,1,2,3,4,5,6,255};
+
+        // The variable c will have values from 0 to 9, since
+        // calibrated values are in the range of 0 to 1000, and
+        // 1000/101 is 9 with integer math.
+        char c = display_characters[calibrated_values[i]/101];
+
+        // Display the bar graph character.
+        print_character(c);
+    }
+}
+
 // Initializes the 3pi, displays a welcome message, calibrates, and
 // plays the initial music.
 void initialize()

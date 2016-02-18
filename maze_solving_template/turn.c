@@ -1,4 +1,4 @@
-#include <polulu/3pi.h>
+#include <pololu/3pi.h>
 
 // Define speeds that you'd like to be using
 #define SLOW 25
@@ -44,8 +44,14 @@ char select_turn(unsigned char found_left, unsigned char found_straight, unsigne
         return 'L';
     else if(found_straight)
         // Straight goes here
+        // FIX ME
+        return 'L';
     else if(found_right)
         // Return Right
+        // FIX ME
+        return 'L';
     else
         // Go backwards
+        // FIX ME
+        return 'L'
 }
