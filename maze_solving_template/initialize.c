@@ -1,3 +1,8 @@
+/* This code was copied from:
+ * https://github.com/pololu/libpololu-avr/blob/master/examples_templates/3pi-linefollower-pid/test.c
+ * We want to thank them for their help. We are pretty sure this is a correct following of the license
+ */
+
 #include <pololu/3pi.h>
 #include <avr/pgmspace.h>
 
