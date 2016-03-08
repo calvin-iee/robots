@@ -28,6 +28,9 @@ void turn(char direction)
             set_motors(-MEDIUM, MEDIUM);
             delay_ms(DELAY_TURN);
             break;
+        default:
+            // do nothing
+            break;
     }
 }
 
@@ -53,5 +56,5 @@ char select_turn(unsigned char found_left, unsigned char found_straight, unsigne
     else
         // Go backwards
         // FIX ME
-        return 'L'
+        return 'L';
 }

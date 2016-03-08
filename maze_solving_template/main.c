@@ -44,7 +44,7 @@ int first_main_loop()
     delay_ms(50);
      
     // These variables record whether the robot has seen a line to the
-    // left, straight ahead, and right, whil examining the current
+    // left, straight ahead, and right, while examining the current
     // intersection.
     unsigned char found_left=0;
     unsigned char found_straight=0;
@@ -73,7 +73,7 @@ int first_main_loop()
     // Check for the ending spot.
     // If all three middle sensors are on dark black, we have
     // solved the maze.
-    if(sensors[1] > 600 && sensors[2] > 600 && sensors[3] > 600)
+    if(sensors[1] > 400 && sensors[2] > 400 && sensors[3] > 400)
         return 1;
      
     // Intersection identification is complete.
@@ -87,15 +87,13 @@ int first_main_loop()
     turn(dir);
      
     // Store the intersection in the path variable.
-    path[path_length] = dir;
-    path_length ++;
-     
-    // You should check to make sure that the path_length does not
-    // exceed the bounds of the array.  We'll ignore that in this
-    // example.
-     
-    // Simplify the learned path. You can implement this!
-    // simplify_path();
+    if(path_length < 100){
+        path[path_length] = dir;
+        path_length ++;
+    }
+    else{
+        //throw it away for now
+    }
      
     // Display the path on the LCD.
     display_path();
@@ -125,11 +123,30 @@ void maze_solve()
     // FIRST MAIN LOOP BODY
     // (when we find the goal, we use break; to get out of this)
     while(!first_main_loop()) {}
+    set_motors(0,0);
+    play_from_program_space(end);
+    
+    // Simplify the learned path. You can implement this!
+    //  You can either do this at the end, or during the main loop
+    // delay(1000);
+    // simplify_path();
     // Now enter an infinite loop - we can re-run the maze as many
     // times as we want to.
     while(1)
     {
         // Beep to show that we finished the maze.
+        // Display battery voltage and wait for button press
+        while(!button_is_pressed(BUTTON_B))
+        {
+            clear();
+            print("Ready to");
+            lcd_goto_xy(0,1);
+            print("go again");
+
+            delay_ms(100);
+        }
+        initialize();
+
         // Wait for the user to press a button...
         int i;
         for(i=0;i<path_length;i++)
@@ -140,6 +157,8 @@ void maze_solve()
         // Follow the last segment up to the finish.
         follow_segment();
         // Now we should be at the finish! Restart the loop.
+        set_motors(0,0);
+        play_from_program_space(end);
     }
 }
 
