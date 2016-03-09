@@ -124,7 +124,6 @@ void maze_solve()
     // (when we find the goal, we use break; to get out of this)
     while(!first_main_loop()) {}
     set_motors(0,0);
-    play_from_program_space(end);
     
     // Simplify the learned path. You can implement this!
     //  You can either do this at the end, or during the main loop
@@ -158,7 +157,6 @@ void maze_solve()
         follow_segment();
         // Now we should be at the finish! Restart the loop.
         set_motors(0,0);
-        play_from_program_space(end);
     }
 }
 
